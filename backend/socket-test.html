@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Socket.io Test</title>
+  <script src="http://localhost:5000/socket.io/socket.io.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    #log { background: #111; color: #0f0; padding: 15px; height: 400px; overflow-y: auto; border-radius: 8px; font-size: 14px; }
+    input, button { padding: 8px; margin: 5px 0; font-size: 14px; }
+    h2 { color: #333; }
+  </style>
+</head>
+<body>
+  <h2>🔌 Socket.io Real-Time Test</h2>
+
+  <label>Room ID (Room ka MongoDB _id daalo): </label><br/>
+  <input type="text" id="roomIdInput" placeholder="Room ka _id yaha paste karo" style="width: 350px;" />
+  <button onclick="joinRoom()">Join Room</button>
+
+  <h3>Live Log:</h3>
+  <div id="log"></div>
+
+  <script>
+    const socket = io('http://localhost:5000');
+
+    const log = (msg) => {
+      const logDiv = document.getElementById('log');
+      const time = new Date().toLocaleTimeString();
+      logDiv.innerHTML += `[${time}] ${msg}<br/>`;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    };
+
+    socket.on('connect', () => {
+      log('✅ Connected to server. Socket ID: ' + socket.id);
+    });
+
+    socket.on('disconnect', () => {
+      log('❌ Disconnected from server');
+    });
+
+    function joinRoom() {
+      const roomId = document.getElementById('roomIdInput').value.trim();
+      if (!roomId) {
+        alert('Room ID daalo pehle!');
+        return;
+      }
+      socket.emit('joinRoom', roomId);
+      log('👉 Joining room: ' + roomId);
+    }
+
+    socket.on('taskCreated', (task) => {
+      log('🆕 TASK CREATED: "' + task.title + '" (status: ' + task.status + ')');
+    });
+
+    socket.on('taskUpdated', (task) => {
+      log('✏️ TASK UPDATED: "' + task.title + '" → status: ' + task.status + ', priority: ' + task.priority);
+    });
+
+    socket.on('taskDeleted', (data) => {
+      log('🗑️ TASK DELETED: ' + data.taskId);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cream: #EDEEFB;
+  --color-ink: #1A1A1A;
+  --color-indigo: #5B4FE5;
+  --color-indigo-dark: #4A3FD1;
+
+  --font-serif: "Fraunces", serif;
+  --font-sans: "Inter", sans-serif;
+}
