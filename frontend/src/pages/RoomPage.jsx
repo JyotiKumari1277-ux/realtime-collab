@@ -398,43 +398,51 @@ function RoomPage() {
         </div>
 
         <nav className="flex-1 px-4 space-y-1">
+<button
+  onClick={() => setActiveTab('dashboard')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    activeTab === 'dashboard'
+      ? 'bg-[#1f2937] text-white'
+      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+  }`}
+>
+  <span className="text-base">🏠</span> Dashboard
+</button>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition"
-          >
-            <span className="text-base">🏠</span> Dashboard
-          </button>
+  onClick={() => setActiveTab('workspaces')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    activeTab === 'workspaces'
+      ? 'bg-[#1f2937] text-white'
+      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+  }`}
+>
+  <span className="text-base">🏢</span> Workspaces
+</button>
           <button
-            onClick={() => navigate('/dashboard')}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition"
-          >
-            <span className="text-base">▦</span> Workspaces
-          </button>
+  onClick={() => setActiveTab('activity')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    activeTab === 'activity'
+      ? 'bg-[#1f2937] text-white'
+      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+  }`}
+>
+  <span className="text-base">📈</span> Activity
+  {activities.length > 0 && (
+    <span className={`ml-auto text-[11px] font-semibold px-2 py-0.5 rounded-full ${activeTab === 'activity' ? 'bg-white/20' : 'bg-slate-100'}`}>
+      {activities.length}
+    </span>
+  )}
+</button>
           <button
-            onClick={() => setActiveTab('activity')}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
-              activeTab === 'activity'
-                ? 'bg-indigo/10 text-indigo'
-                : 'text-slate-500 hover:bg-slate-50 hover:text-ink'
-            }`}
-          >
-            <span className="text-base">📈</span> Activity
-            {activities.length > 0 && (
-              <span className="ml-auto text-[11px] font-semibold text-slate-400 bg-slate-100 rounded-full px-2 py-0.5">
-                {activities.length}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('members')}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
-              activeTab === 'members'
-                ? 'bg-indigo/10 text-indigo'
-                : 'text-slate-500 hover:bg-slate-50 hover:text-ink'
-            }`}
-          >
-            <span className="text-base">👥</span> Members
-          </button>
+  onClick={() => setActiveTab('settings')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    activeTab === 'settings'
+      ? 'bg-[#1f2937] text-white'
+      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+  }`}
+>
+  <span className="text-base">⚙️</span> Settings
+</button>
           <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition">
             <span className="text-base">⚙️</span> Settings
           </button>
