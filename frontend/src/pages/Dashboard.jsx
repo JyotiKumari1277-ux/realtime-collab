@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 function Dashboard() {
   const { user, logout } = useAuth();
@@ -20,7 +21,7 @@ function Dashboard() {
 
   const fetchRooms = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/rooms', config);
+      const res = await axios.get(`${API_URL}/api/rooms`, config);
       setRooms(res.data);
     } catch (err) {
       setError('Could not load rooms.');
@@ -38,7 +39,7 @@ function Dashboard() {
     if (!newRoomName.trim()) return;
     setActionLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/rooms', { name: newRoomName }, config);
+      await axios.post(`${API_URL}/api/rooms`, { name: newRoomName }, config);
       setNewRoomName('');
       fetchRooms();
     } catch (err) {
@@ -53,7 +54,7 @@ function Dashboard() {
     if (!joinCode.trim()) return;
     setActionLoading(true);
     try {
-      await axios.post('http://localhost:5000/api/rooms/join', { roomCode: joinCode.trim().toUpperCase() }, config);
+      await axios.post(`${API_URL}/api/rooms/join`, { roomCode: joinCode.trim().toUpperCase() }, config);
       setJoinCode('');
       fetchRooms();
     } catch (err) {

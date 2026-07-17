@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import socket from '../socket';
+import { API_URL } from '../config';
 
 function RoomPage() {
   const { id } = useParams();
@@ -33,7 +34,7 @@ function RoomPage() {
 
   const fetchRoom = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/rooms/${id}`, config);
+      const res = await axios.get(`${API_URL}/api/rooms/${id}`, config);
       setRoom(res.data);
     } catch (err) {
       setError('Could not load this workspace.');
@@ -44,7 +45,7 @@ function RoomPage() {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/${id}`, config);
+      const res = await axios.get(`${API_URL}/api/tasks/${id}`, config);
       setTasks(res.data);
     } catch (err) {
       console.error('Could not load tasks');
@@ -53,7 +54,7 @@ function RoomPage() {
 
   const fetchActivities = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/activity/${id}`, config);
+      const res = await axios.get(`${API_URL}/api/activity/${id}`, config);
       setActivities(res.data);
     } catch (err) {
       console.error('Could not load activity');
@@ -91,10 +92,6 @@ function RoomPage() {
       );
       setSelectedTask((prev) => {
         if (prev && prev._id === updatedTask._id) {
-          if (descDraft !== prev.description && descDraft.trim() !== '') {
-            setConflictWarning(true);
-            return prev;
-          }
           return updatedTask;
         }
         return prev;
@@ -124,14 +121,14 @@ function RoomPage() {
       socket.off('taskUpdated');
       socket.off('taskDeleted');
     };
-  }, [id, descDraft]);
+  }, [id]);
 
   const handleAddTask = async (e) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
     try {
       await axios.post(
-        'http://localhost:5000/api/tasks',
+        `${API_URL}/api/tasks`,
         { roomId: id, title: newTitle },
         config
       );
@@ -144,7 +141,7 @@ function RoomPage() {
   const handleStatusChange = async (task, newStatus) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/tasks/${task._id}`,
+        `${API_URL}/api/tasks/${task._id}`,
         { status: newStatus, version: task.version },
         config
       );
@@ -158,7 +155,7 @@ function RoomPage() {
 
   const handleDelete = async (taskId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`, config);
+      await axios.delete(`${API_URL}/api/tasks/${taskId}`, config);
     } catch (err) {
       console.error('Could not delete task');
     }
@@ -180,7 +177,7 @@ function RoomPage() {
     if (!selectedTask) return;
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${selectedTask._id}`,
+        `${API_URL}/api/tasks/${selectedTask._id}`,
         { priority: newPriority, version: selectedTask.version },
         config
       );
@@ -199,7 +196,7 @@ function RoomPage() {
     setSaving(true);
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${selectedTask._id}`,
+        `${API_URL}/api/tasks/${selectedTask._id}`,
         { description: descDraft, version: selectedTask.version },
         config
       );
@@ -218,7 +215,7 @@ function RoomPage() {
 
   const handleConflictRefresh = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/tasks/${id}`, config);
+      const res = await axios.get(`${API_URL}/api/tasks/${id}`, config);
       setTasks(res.data);
       const latest = res.data.find((t) => t._id === selectedTask._id);
       if (latest) {
@@ -236,7 +233,7 @@ function RoomPage() {
     if (!selectedTask) return;
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/tasks/${selectedTask._id}/restore/${historyIndex}`,
+        `${API_URL}/api/tasks/${selectedTask._id}/restore/${historyIndex}`,
         {},
         config
       );
@@ -256,7 +253,7 @@ function RoomPage() {
   const handleRoleChange = async (memberId, newRole) => {
     try {
       const res = await axios.put(
-        `http://localhost:5000/api/rooms/${id}/members/${memberId}/role`,
+        `${API_URL}/api/rooms/${id}/members/${memberId}/role`,
         { role: newRole },
         config
       );
