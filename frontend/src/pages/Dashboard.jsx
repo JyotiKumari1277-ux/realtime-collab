@@ -76,16 +76,14 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-cream font-sans flex flex-col">
       {/* Top bar — Flock + Logout kept exactly as before */}
-      <div className="bg-white border-b border-slate-200 px-8 py-5 grid grid-cols-3 items-center">
-        <div>
+      <div className="bg-white border-b border-slate-200 px-8 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" fill="#6C63FF" />
+          </svg>
           <h2 className="font-serif text-xl font-semibold text-ink">Flock</h2>
         </div>
-        <div className="flex justify-center">
-          <span className="text-base text-slate-600 bg-indigo/10 px-4 py-1.5 rounded-full">
-            👋 Welcome, <span className="font-semibold text-indigo">{user.name}</span>
-          </span>
-        </div>
-        <div className="flex justify-end">
+        <div>
           <button
             onClick={handleLogout}
             className="text-sm font-medium text-white bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-900 transition shadow-sm"
