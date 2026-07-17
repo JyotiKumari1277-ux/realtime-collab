@@ -411,10 +411,10 @@ function RoomPage() {
 >
   <span className="text-base">🏠</span> Dashboard
 </button>
-          <button
+<button
   onClick={() => {
-    setActiveTab('workspaces');
-    navigate('/workspaces'); // यह आपको वर्कस्पेस पेज पर ले जाएगा
+    setActiveTab('workspaces'); // बस यही रखें
+    // navigate('/') वाली लाइन को हटा दें
   }}
   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
     activeTab === 'workspaces'
