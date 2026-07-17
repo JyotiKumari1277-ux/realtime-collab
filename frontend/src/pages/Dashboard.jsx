@@ -71,26 +71,27 @@ function Dashboard() {
 
   const avatarColors = ['bg-indigo', 'bg-teal-600', 'bg-amber-500', 'bg-rose-500'];
   const initials = (name) => (name ? name.charAt(0).toUpperCase() : '?');
-
-  return (
-    <div className="min-h-screen bg-cream font-sans">
-      {/* Top bar */}
-      <div className="bg-white border-b border-slate-200 px-8 py-5 flex justify-between items-center">
-        <div>
-          <h2 className="font-serif text-xl font-semibold text-ink">Flock</h2>
-        </div>
-        <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-500">
-            👋 Welcome, <span className="font-medium text-ink">{user.name}</span>
-          </span>
-          <button
-            onClick={handleLogout}
-            className="text-sm font-medium text-white bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-900 transition shadow-sm"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+return (
+  <div className="min-h-screen bg-cream font-sans">
+    {/* Top bar */}
+    <div className="bg-white border-b border-slate-200 px-8 py-5 grid grid-cols-3 items-center">
+  <div>
+    <h2 className="font-serif text-xl font-semibold text-ink">Flock</h2>
+  </div>
+  <div className="flex justify-center">
+    <span className="text-sm text-slate-500">
+      👋 Welcome, <span className="font-medium text-ink">{user.name}</span>
+    </span>
+  </div>
+  <div className="flex justify-end">
+    <button
+      onClick={handleLogout}
+      className="text-sm font-medium text-white bg-slate-800 px-4 py-2 rounded-lg hover:bg-slate-900 transition shadow-sm"
+    >
+      Logout
+    </button>
+  </div>
+</div>
 
       <div className="max-w-5xl mx-auto p-8">
         {error && (
