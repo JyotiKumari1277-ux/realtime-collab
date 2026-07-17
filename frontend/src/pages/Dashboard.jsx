@@ -78,11 +78,11 @@ return (
   <div>
     <h2 className="font-serif text-xl font-semibold text-ink">Flock</h2>
   </div>
-  <div className="flex justify-center">
-    <span className="text-sm text-slate-500">
-      👋 Welcome, <span className="font-medium text-ink">{user.name}</span>
-    </span>
-  </div>
+<div className="flex justify-center">
+  <span className="text-base text-slate-600 bg-indigo/10 px-4 py-1.5 rounded-full">
+    👋 Welcome, <span className="font-semibold text-indigo">{user.name}</span>
+  </span>
+</div>
   <div className="flex justify-end">
     <button
       onClick={handleLogout}
