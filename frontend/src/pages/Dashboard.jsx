@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -15,6 +15,10 @@ function Dashboard() {
   const [joinCode, setJoinCode] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [renamingRoomId, setRenamingRoomId] = useState(null);
+  const [renameValue, setRenameValue] = useState('');
+  const [copiedId, setCopiedId] = useState(null);
+  const menuRef = useRef(null);
 
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
@@ -33,6 +37,17 @@ function Dashboard() {
 
   useEffect(() => {
     fetchRooms();
+  }, []);
+
+  // 3-dot menu ke bahar click karne par band ho jaye
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenuId(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const handleCreateRoom = async (e) => {
@@ -68,6 +83,45 @@ function Dashboard() {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  // --- Naye handlers ---
+
+  const handleCopyCode = (room) => {
+    navigator.clipboard.writeText(room.roomCode);
+    setCopiedId(room._id);
+    setOpenMenuId(null);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
+
+  const startRename = (room) => {
+    setRenamingRoomId(room._id);
+    setRenameValue(room.name);
+    setOpenMenuId(null);
+  };
+
+  const handleRenameSubmit = async (e, roomId) => {
+    e.preventDefault();
+    if (!renameValue.trim()) return;
+    try {
+      await axios.put(`${API_URL}/api/rooms/${roomId}/rename`, { name: renameValue.trim() }, config);
+      setRenamingRoomId(null);
+      fetchRooms();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Could not rename room.');
+    }
+  };
+
+  const handleDelete = async (room) => {
+    setOpenMenuId(null);
+    const confirmed = window.confirm(`"${room.name}" ko delete karna hai? Ye action wapas nahi ho sakta.`);
+    if (!confirmed) return;
+    try {
+      await axios.delete(`${API_URL}/api/rooms/${room._id}`, config);
+      fetchRooms();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Could not delete room.');
+    }
   };
 
   const avatarColors = ['bg-indigo', 'bg-teal-600', 'bg-amber-500', 'bg-rose-500'];
@@ -185,25 +239,84 @@ function Dashboard() {
             {rooms.map((room, i) => (
               <div
                 key={room._id}
-                onClick={() => navigate(`/room/${room._id}`)}
+                onClick={() => renamingRoomId !== room._id && navigate(`/room/${room._id}`)}
                 className="relative bg-white p-5 rounded-2xl shadow-sm border border-slate-100 cursor-pointer hover:shadow-md hover:border-indigo/30 transition"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className={`w-10 h-10 rounded-lg ${avatarColors[i % avatarColors.length]} text-white flex items-center justify-center font-semibold text-sm`}>
                     {initials(room.name)}
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setOpenMenuId(openMenuId === room._id ? null : room._id);
-                    }}
-                    className="text-slate-400 hover:text-slate-600 px-1"
-                  >
-                    ⋮
-                  </button>
+
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenMenuId(openMenuId === room._id ? null : room._id);
+                      }}
+                      className="text-slate-400 hover:text-slate-600 px-1"
+                    >
+                      ⋮
+                    </button>
+
+                    {openMenuId === room._id && (
+                      <div
+                        ref={menuRef}
+                        onClick={(e) => e.stopPropagation()}
+                        className="absolute right-0 top-7 w-40 bg-white border border-slate-200 rounded-lg shadow-lg z-10 py-1"
+                      >
+                        <button
+                          onClick={() => handleCopyCode(room)}
+                          className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"
+                        >
+                          {copiedId === room._id ? 'Copied!' : 'Copy room code'}
+                        </button>
+                        <button
+                          onClick={() => startRename(room)}
+                          className="w-full text-left px-3 py-2 text-sm text-slate-600 hover:bg-slate-50"
+                        >
+                          Rename workspace
+                        </button>
+                        <button
+                          onClick={() => handleDelete(room)}
+                          className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-red-50"
+                        >
+                          Delete workspace
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
-                <h3 className="font-serif font-semibold text-ink">{room.name}</h3>
+                {renamingRoomId === room._id ? (
+                  <form
+                    onClick={(e) => e.stopPropagation()}
+                    onSubmit={(e) => handleRenameSubmit(e, room._id)}
+                    className="flex gap-1"
+                  >
+                    <input
+                      autoFocus
+                      value={renameValue}
+                      onChange={(e) => setRenameValue(e.target.value)}
+                      className="flex-1 border border-slate-200 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-indigo"
+                    />
+                    <button
+                      type="submit"
+                      className="text-xs bg-indigo text-white px-2 rounded"
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setRenamingRoomId(null)}
+                      className="text-xs text-slate-400 px-1"
+                    >
+                      ✕
+                    </button>
+                  </form>
+                ) : (
+                  <h3 className="font-serif font-semibold text-ink">{room.name}</h3>
+                )}
+
                 <p className="text-xs text-slate-400 mt-1">Code: {room.roomCode}</p>
                 <p className="text-xs text-slate-400 mt-2 flex items-center gap-1">
                   <span>👥</span> {room.members.length} member{room.members.length > 1 ? 's' : ''}

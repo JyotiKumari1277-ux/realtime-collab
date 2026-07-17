@@ -202,6 +202,66 @@ const updateMemberRole = async (req, res) => {
   }
 };
 
+// @desc   Rename a room
+// @route  PUT /api/rooms/:id/rename
+const renameRoom = async (req, res) => {
+  try {
+    const { name } = req.body;
+
+    if (!name || !name.trim()) {
+      return res.status(400).json({ message: 'Room name is required' });
+    }
+
+    const room = await Room.findById(req.params.id);
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+
+    const requester = room.members.find(
+      (m) => m.user.toString() === req.user._id.toString()
+    );
+    if (!requester || requester.role !== 'owner') {
+      return res.status(403).json({ message: 'Only the owner can rename this room' });
+    }
+
+    room.name = name.trim();
+    await room.save();
+
+    res.status(200).json(room);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// @desc   Delete a room
+// @route  DELETE /api/rooms/:id
+const deleteRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (!room) {
+      return res.status(404).json({ message: 'Room not found' });
+    }
+
+    const requester = room.members.find(
+      (m) => m.user.toString() === req.user._id.toString()
+    );
+    if (!requester || requester.role !== 'owner') {
+      return res.status(403).json({ message: 'Only the owner can delete this room' });
+    }
+
+    await Room.deleteOne({ _id: room._id });
+
+    // Room se linked activity logs bhi clean kar dete hain
+    if (Activity) {
+      await Activity.deleteMany({ room: room._id });
+    }
+
+    res.status(200).json({ message: 'Room deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   createRoom,
   joinRoom,
@@ -209,4 +269,6 @@ module.exports = {
   getRoomById,
   inviteMember,
   updateMemberRole,
+  renameRoom,
+  deleteRoom,
 };
