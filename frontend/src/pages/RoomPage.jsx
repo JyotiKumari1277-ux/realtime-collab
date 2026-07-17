@@ -399,7 +399,10 @@ function RoomPage() {
 
         <nav className="flex-1 px-4 space-y-1">
 <button
-  onClick={() => setActiveTab('dashboard')}
+  onClick={() => {
+    setActiveTab('dashboard');
+    navigate('/dashboard'); // यह आपको डैशबोर्ड पेज पर ले जाएगा
+  }}
   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
     activeTab === 'dashboard'
       ? 'bg-[#1f2937] text-white'
@@ -409,7 +412,10 @@ function RoomPage() {
   <span className="text-base">🏠</span> Dashboard
 </button>
           <button
-  onClick={() => setActiveTab('workspaces')}
+  onClick={() => {
+    setActiveTab('workspaces');
+    navigate('/workspaces'); // यह आपको वर्कस्पेस पेज पर ले जाएगा
+  }}
   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
     activeTab === 'workspaces'
       ? 'bg-[#1f2937] text-white'
@@ -417,6 +423,16 @@ function RoomPage() {
   }`}
 >
   <span className="text-base">🏢</span> Workspaces
+</button>
+<button
+  onClick={() => setActiveTab('members')}
+  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+    activeTab === 'members'
+      ? 'bg-[#1f2937] text-white'
+      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+  }`}
+>
+  <span className="text-base">👥</span> Members
 </button>
           <button
   onClick={() => setActiveTab('activity')}
@@ -443,9 +459,7 @@ function RoomPage() {
 >
   <span className="text-base">⚙️</span> Settings
 </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition">
-            <span className="text-base">⚙️</span> Settings
-          </button>
+          
         </nav>
 
         <div className="px-4 pb-5 pt-3 border-t border-slate-100">
