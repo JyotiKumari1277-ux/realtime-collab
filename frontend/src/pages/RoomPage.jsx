@@ -7,7 +7,7 @@ import { API_URL } from '../config';
 
 function RoomPage() {
   const { id } = useParams();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [room, setRoom] = useState(null);
@@ -27,6 +27,9 @@ function RoomPage() {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [quickAddColumn, setQuickAddColumn] = useState(null);
+  const [quickAddTitle, setQuickAddTitle] = useState('');
+  const [openMenuTaskId, setOpenMenuTaskId] = useState(null);
 
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
@@ -135,6 +138,32 @@ function RoomPage() {
       setNewTitle('');
     } catch (err) {
       console.error('Could not add task');
+    }
+  };
+
+  const handleQuickAddToColumn = async (colKey) => {
+    if (!quickAddTitle.trim()) {
+      setQuickAddColumn(null);
+      return;
+    }
+    try {
+      const res = await axios.post(
+        `${API_URL}/api/tasks`,
+        { roomId: id, title: quickAddTitle },
+        config
+      );
+      if (colKey !== 'todo') {
+        await axios.put(
+          `${API_URL}/api/tasks/${res.data._id}`,
+          { status: colKey, version: res.data.version },
+          config
+        );
+      }
+    } catch (err) {
+      console.error('Could not add task');
+    } finally {
+      setQuickAddTitle('');
+      setQuickAddColumn(null);
     }
   };
 
@@ -358,126 +387,232 @@ function RoomPage() {
     : [];
 
   return (
-    <div className="min-h-screen bg-cream font-sans">
-      <div className="bg-ink text-white px-8 py-5">
-        <div className="max-w-6xl mx-auto flex justify-between items-start">
-          <div>
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="text-sm text-indigo-300 hover:text-indigo-200 mb-1 transition"
-            >
-              ← Back to Dashboard
-            </button>
-            <h1 className="font-serif text-xl font-semibold">{room?.name}</h1>
-            <p className="text-xs text-slate-400 mt-0.5">Code: {room?.roomCode}</p>
+    <div className="min-h-screen bg-cream font-sans flex">
+      {/* Sidebar */}
+      <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-slate-100 h-screen sticky top-0">
+        <div className="flex items-center gap-2 px-6 py-6">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo to-purple-500 flex items-center justify-center text-white text-base">
+            ⚡
           </div>
+          <span className="font-serif text-lg font-bold text-ink">Flock</span>
+        </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative mr-3">
+        <nav className="flex-1 px-4 space-y-1">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition"
+          >
+            <span className="text-base">🏠</span> Dashboard
+          </button>
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition"
+          >
+            <span className="text-base">▦</span> Workspaces
+          </button>
+          <button
+            onClick={() => setActiveTab('activity')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
+              activeTab === 'activity'
+                ? 'bg-indigo/10 text-indigo'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-ink'
+            }`}
+          >
+            <span className="text-base">📈</span> Activity
+            {activities.length > 0 && (
+              <span className="ml-auto text-[11px] font-semibold text-slate-400 bg-slate-100 rounded-full px-2 py-0.5">
+                {activities.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('members')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition ${
+              activeTab === 'members'
+                ? 'bg-indigo/10 text-indigo'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-ink'
+            }`}
+          >
+            <span className="text-base">👥</span> Members
+          </button>
+          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-500 hover:bg-slate-50 hover:text-ink transition">
+            <span className="text-base">⚙️</span> Settings
+          </button>
+        </nav>
+
+        <div className="px-4 pb-5 pt-3 border-t border-slate-100">
+          <div className="flex items-center gap-2.5 px-2 py-2">
+            <div className="w-9 h-9 rounded-full bg-indigo text-white flex items-center justify-center text-sm font-semibold shrink-0">
+              {initials(user?.name)}
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-ink truncate">{user?.name}</p>
+              <p className="text-xs text-slate-400 truncate">{user?.email}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+            className="w-full text-left px-2 py-2 mt-1 text-sm text-slate-400 hover:text-red-500 transition"
+          >
+            ↩ Logout
+          </button>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <div className="flex-1 min-w-0 flex flex-col">
+        <div className="bg-gradient-to-r from-ink via-[#241f4d] to-indigo-dark text-white px-8 py-6">
+          <div className="mx-auto flex justify-between items-start">
+            <div>
               <button
-                onClick={() => {
-                  setShowNotifications((prev) => !prev);
-                  if (!showNotifications) setUnreadCount(0);
-                }}
-                className="relative text-white/80 hover:text-white text-lg"
+                onClick={() => navigate('/dashboard')}
+                className="text-sm text-indigo-300 hover:text-indigo-200 mb-2 transition"
               >
-                🔔
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
+                ← Back to Dashboard
               </button>
-
-              {showNotifications && (
-                <>
-                  <div
-                    onClick={() => setShowNotifications(false)}
-                    className="fixed inset-0 z-10"
-                  ></div>
-                  <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-lg shadow-lg z-20 max-h-80 overflow-y-auto">
-                    {notifications.length === 0 ? (
-                      <p className="text-xs text-slate-400 p-4">No notifications yet.</p>
-                    ) : (
-                      notifications.map((n) => (
-                        <div
-                          key={n.id}
-                          className="px-4 py-2.5 text-xs text-ink border-b border-slate-50 last:border-0"
-                        >
-                          <p>{n.text}</p>
-                          <p className="text-slate-400 mt-0.5">
-                            {n.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </p>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </>
-              )}
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="font-serif text-xl font-semibold">{room?.name}</h1>
+                <span className="text-[11px] font-medium bg-white/10 text-white/80 px-2.5 py-1 rounded-full">
+                  Workspace
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 mt-1 flex items-center gap-1.5">
+                Code: {room?.roomCode}
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(room?.roomCode || '');
+                  }}
+                  className="text-slate-400 hover:text-white transition"
+                  title="Copy code"
+                >
+                  ⧉
+                </button>
+              </p>
             </div>
 
-            <span className="text-xs text-slate-400 mr-1">
-              {onlineUsers.length} online
-            </span>
-            <div className="flex -space-x-2">
-              {onlineUsers.map((u, i) => (
-                <div
-                  key={u.userId + i}
-                  title={u.userName}
-                  className={`w-8 h-8 rounded-full ${avatarColors[i % avatarColors.length]} border-2 border-ink flex items-center justify-center text-xs font-semibold`}
+            <div className="flex items-center gap-2">
+              <div className="relative mr-3">
+                <button
+                  onClick={() => {
+                    setShowNotifications((prev) => !prev);
+                    if (!showNotifications) setUnreadCount(0);
+                  }}
+                  className="relative text-white/80 hover:text-white text-lg"
                 >
-                  {initials(u.userName)}
-                </div>
-              ))}
+                  🔔
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
+
+                {showNotifications && (
+                  <>
+                    <div
+                      onClick={() => setShowNotifications(false)}
+                      className="fixed inset-0 z-10"
+                    ></div>
+                    <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-lg shadow-lg z-20 max-h-80 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <p className="text-xs text-slate-400 p-4">No notifications yet.</p>
+                      ) : (
+                        notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            className="px-4 py-2.5 text-xs text-ink border-b border-slate-50 last:border-0"
+                          >
+                            <p>{n.text}</p>
+                            <p className="text-slate-400 mt-0.5">
+                              {n.time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <span className="text-xs text-slate-400 mr-1 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-teal-400"></span>
+                {onlineUsers.length} online
+              </span>
+              <div className="flex -space-x-2 mr-2">
+                {onlineUsers.map((u, i) => (
+                  <div
+                    key={u.userId + i}
+                    title={u.userName}
+                    className={`w-8 h-8 rounded-full ${avatarColors[i % avatarColors.length]} border-2 border-ink flex items-center justify-center text-xs font-semibold`}
+                  >
+                    {initials(u.userName)}
+                  </div>
+                ))}
+              </div>
+              <div className="w-9 h-9 rounded-full bg-indigo flex items-center justify-center text-sm font-semibold border-2 border-white/20">
+                {initials(user?.name)}
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="bg-white border-b border-slate-200 px-8">
-        <div className="max-w-6xl mx-auto flex gap-6">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`py-3 text-sm font-medium border-b-2 transition ${
-                activeTab === tab.key
-                  ? 'border-indigo text-indigo'
-                  : 'border-transparent text-slate-500 hover:text-ink'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        <div className="bg-white border-b border-slate-200 px-8">
+          <div className="mx-auto flex gap-6">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`py-3 text-sm font-medium border-b-2 transition ${
+                  activeTab === tab.key
+                    ? 'border-indigo text-indigo'
+                    : 'border-transparent text-slate-500 hover:text-ink'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <div className="max-w-6xl mx-auto p-8">
+        <div className="mx-auto p-8 w-full flex-1">
         {activeTab === 'board' && (
           <>
             <div className="flex gap-2 mb-6">
               {!isViewer && (
-                <form onSubmit={handleAddTask} className="flex gap-2 flex-1">
+                <form onSubmit={handleAddTask} className="flex-1 relative">
                   <input
                     type="text"
-                    placeholder="New task title"
+                    placeholder="Add a new task..."
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
-                    className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
+                    className="w-full border border-slate-200 rounded-lg pl-4 pr-10 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
                   />
                   <button
                     type="submit"
-                    className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-indigo transition text-lg leading-none"
+                    title="Add task"
                   >
-                    Add Task
+                    ⊕
                   </button>
                 </form>
+              )}
+
+              {!isViewer && (
+                <button
+                  onClick={handleAddTask}
+                  className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition shrink-0"
+                >
+                  + Add Task
+                </button>
               )}
 
               <div className="relative">
                 <button
                   onClick={() => setShowExportMenu((prev) => !prev)}
-                  className="border border-slate-200 bg-white text-ink px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-50 transition"
+                  className="border border-slate-200 bg-white text-ink px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-50 transition shrink-0"
                 >
                   Export ▾
                 </button>
@@ -506,75 +641,180 @@ function RoomPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {columns.map((col) => (
-                <div key={col.key} className="bg-white/60 rounded-xl p-3 border border-slate-100">
-                  <div className="flex items-center gap-2 mb-3 px-1">
-                    <span className={`w-2 h-2 rounded-full ${col.dot}`}></span>
-                    <h2 className="font-serif font-semibold text-sm text-ink">{col.label}</h2>
-                    <span className="text-xs text-slate-400 ml-auto">
-                      {tasks.filter((t) => t.status === col.key).length}
-                    </span>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+              {columns.map((col) => {
+                const colTasks = tasks.filter((t) => t.status === col.key);
+                return (
+                  <div key={col.key} className="bg-white/60 rounded-xl p-3 border border-slate-100">
+                    <div className="flex items-center gap-2 mb-3 px-1">
+                      <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`}></span>
+                      <h2 className="font-serif font-semibold text-sm text-ink">{col.label}</h2>
+                      <span className="text-xs font-medium text-slate-400 bg-slate-100 rounded-full w-5 h-5 flex items-center justify-center ml-auto">
+                        {colTasks.length}
+                      </span>
+                    </div>
 
-                  {tasks
-                    .filter((t) => t.status === col.key)
-                    .map((task) => (
-                      <div
-                        key={task._id}
-                        onClick={() => openTaskPanel(task)}
-                        className={`bg-white rounded-lg p-3 mb-2 shadow-sm border-t-2 ${col.border} hover:shadow-md transition cursor-pointer`}
-                      >
-                        <p className="font-medium text-sm text-ink">{task.title}</p>
-                        <div className="flex gap-3 mt-2 text-xs items-center">
-                          {!isViewer && col.key !== 'todo' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(
-                                  task,
-                                  col.key === 'in-progress' ? 'todo' : 'in-progress'
-                                );
-                              }}
-                              className="text-indigo font-medium"
+                    {colTasks.map((task) => {
+                      const priorityInfo = priorities.find((p) => p.key === task.priority);
+                      return (
+                        <div
+                          key={task._id}
+                          onClick={() => openTaskPanel(task)}
+                          className={`relative bg-white rounded-lg p-3 mb-2 shadow-sm border-t-2 ${col.border} hover:shadow-md transition cursor-pointer`}
+                        >
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-medium text-sm text-ink">{task.title}</p>
+                            {!isViewer && (
+                              <div className="relative shrink-0">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenMenuTaskId((prev) => (prev === task._id ? null : task._id));
+                                  }}
+                                  className="text-slate-300 hover:text-slate-500 leading-none px-1"
+                                >
+                                  ⋮
+                                </button>
+                                {openMenuTaskId === task._id && (
+                                  <>
+                                    <div
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setOpenMenuTaskId(null);
+                                      }}
+                                      className="fixed inset-0 z-10"
+                                    ></div>
+                                    <div className="absolute right-0 mt-1 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setOpenMenuTaskId(null);
+                                          openTaskPanel(task);
+                                        }}
+                                        className="w-full text-left px-3 py-2 text-xs text-ink hover:bg-slate-50 transition"
+                                      >
+                                        View details
+                                      </button>
+                                      <button
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setOpenMenuTaskId(null);
+                                          handleDelete(task._id);
+                                        }}
+                                        className="w-full text-left px-3 py-2 text-xs text-red-500 hover:bg-red-50 transition border-t border-slate-100"
+                                      >
+                                        Delete
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                            )}
+                          </div>
+
+                          {priorityInfo && (
+                            <span
+                              className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full mt-2 ${priorityInfo.color}`}
                             >
-                              ← Move
-                            </button>
+                              {priorityInfo.label}
+                            </span>
                           )}
-                          {!isViewer && col.key !== 'done' && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleStatusChange(
-                                  task,
-                                  col.key === 'todo' ? 'in-progress' : 'done'
-                                );
-                              }}
-                              className="text-teal-600 font-medium"
-                            >
-                              Move →
-                            </button>
-                          )}
-                          {!isViewer && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(task._id);
-                              }}
-                              className="text-red-400 hover:text-red-600 ml-auto"
-                            >
-                              Delete
-                            </button>
-                          )}
+
+                          <div className="flex gap-3 mt-2.5 text-xs items-center">
+                            {!isViewer && col.key !== 'todo' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(
+                                    task,
+                                    col.key === 'in-progress' ? 'todo' : 'in-progress'
+                                  );
+                                }}
+                                className="text-indigo font-medium"
+                              >
+                                ← Move
+                              </button>
+                            )}
+                            {!isViewer && col.key !== 'done' && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleStatusChange(
+                                    task,
+                                    col.key === 'todo' ? 'in-progress' : 'done'
+                                  );
+                                }}
+                                className="text-teal-600 font-medium"
+                              >
+                                Move →
+                              </button>
+                            )}
+                            {!isViewer && (
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDelete(task._id);
+                                }}
+                                className="text-red-400 hover:text-red-600 ml-auto"
+                              >
+                                Delete
+                              </button>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
 
-                  {tasks.filter((t) => t.status === col.key).length === 0 && (
-                    <p className="text-xs text-slate-400 px-1">No tasks</p>
-                  )}
-                </div>
-              ))}
+                    {colTasks.length === 0 && quickAddColumn !== col.key && (
+                      <div className="flex flex-col items-center text-center py-6 px-2">
+                        <div className="text-3xl mb-2">📋</div>
+                        <p className="text-xs font-medium text-slate-400">
+                          {col.key === 'done' ? 'No tasks yet' : 'No tasks'}
+                        </p>
+                        {col.key === 'done' && (
+                          <p className="text-[11px] text-slate-300 mt-0.5">
+                            Great job! You've completed everything.
+                          </p>
+                        )}
+                      </div>
+                    )}
+
+                    {!isViewer && (
+                      <>
+                        {quickAddColumn === col.key ? (
+                          <form
+                            onSubmit={(e) => {
+                              e.preventDefault();
+                              handleQuickAddToColumn(col.key);
+                            }}
+                            className="mt-1"
+                          >
+                            <input
+                              autoFocus
+                              type="text"
+                              value={quickAddTitle}
+                              onChange={(e) => setQuickAddTitle(e.target.value)}
+                              onBlur={() => handleQuickAddToColumn(col.key)}
+                              placeholder="Task title..."
+                              className="w-full border border-indigo/40 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo"
+                            />
+                          </form>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setQuickAddColumn(col.key);
+                              setQuickAddTitle('');
+                            }}
+                            className="w-full text-left px-3 py-2.5 mt-1 text-xs font-medium text-slate-400 hover:text-indigo hover:bg-white rounded-lg border border-dashed border-slate-200 hover:border-indigo/40 transition"
+                          >
+                            + Add another task
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </>
         )}
@@ -704,6 +944,18 @@ function RoomPage() {
             </div>
           </div>
         )}
+        </div>
+
+        <footer className="border-t border-slate-200 bg-white px-8 py-4">
+          <div className="mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
+            <span>© {new Date().getFullYear()} Flock. All rights reserved.</span>
+            <div className="flex items-center gap-4">
+              <span className="hover:text-ink transition cursor-pointer">Privacy Policy</span>
+              <span className="hover:text-ink transition cursor-pointer">Terms of Service</span>
+              <span className="hover:text-ink transition cursor-pointer">Help</span>
+            </div>
+          </div>
+        </footer>
       </div>
 
       {selectedTask && (

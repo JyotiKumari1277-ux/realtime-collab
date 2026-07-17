@@ -12,15 +12,22 @@ const activityRoutes = require('./routes/activityRoutes');
 const app = express();
 const server = http.createServer(app);
 
+// Production ke liye specific CORS configuration
+const corsOptions = {
+  origin: "https://realtime-collab-chi.vercel.app",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+};
+
 const io = new Server(server, {
-  cors: { origin: '*' },
+  cors: corsOptions,
 });
 
 app.set('io', io);
 
 connectDB();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -32,8 +39,6 @@ app.use('/api/rooms', roomRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/activity', activityRoutes);
 
-// ---- LIVE PRESENCE TRACKING ----
-// roomUsers = { roomId: { socketId: { userId, userName } } }
 const roomUsers = {};
 
 const broadcastPresence = (roomId) => {
