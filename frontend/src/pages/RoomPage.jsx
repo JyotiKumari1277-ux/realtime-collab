@@ -474,7 +474,11 @@ function RoomPage() {
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
-        <div className="bg-gradient-to-r from-ink via-[#241f4d] to-indigo-dark text-white px-8 py-6">
+<div className="bg-ink text-white px-8 py-6">cd "C:\Users\Jyoti kumari\OneDrive\Desktop\Realtime-Collaborative"
+git add .
+git commit -m "Add sidebar, export, version history, production config"
+git push
+
           <div className="mx-auto flex justify-between items-start">
             <div>
               <button
