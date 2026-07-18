@@ -30,6 +30,9 @@ function RoomPage() {
   const [quickAddColumn, setQuickAddColumn] = useState(null);
   const [quickAddTitle, setQuickAddTitle] = useState('');
   const [openMenuTaskId, setOpenMenuTaskId] = useState(null);
+  const [showWorkspaceMenu, setShowWorkspaceMenu] = useState(false);
+  const [renamingWorkspace, setRenamingWorkspace] = useState(false);
+  const [workspaceNameDraft, setWorkspaceNameDraft] = useState('');
 
   const config = {
     headers: { Authorization: `Bearer ${user.token}` },
@@ -289,6 +292,25 @@ function RoomPage() {
       setRoom(res.data);
     } catch (err) {
       alert(err.response?.data?.message || 'Could not update role');
+    }
+  };
+
+  const handleRenameWorkspace = async () => {
+    if (!workspaceNameDraft.trim()) {
+      setRenamingWorkspace(false);
+      return;
+    }
+    try {
+      const res = await axios.put(
+        `${API_URL}/api/rooms/${id}`,
+        { name: workspaceNameDraft },
+        config
+      );
+      setRoom(res.data);
+    } catch (err) {
+      alert('Could not rename workspace.');
+    } finally {
+      setRenamingWorkspace(false);
     }
   };
 
@@ -937,8 +959,64 @@ function RoomPage() {
                   </span>
                 </div>
 
-                <div className="col-span-2 bg-white border border-slate-100 rounded-xl p-5">
-                  <h3 className="font-serif font-semibold text-ink mb-3">This Workspace</h3>
+                <div className="col-span-2 bg-white border border-slate-100 rounded-xl p-5 relative">
+                  <div className="flex justify-between items-center mb-3">
+                    {renamingWorkspace ? (
+                      <input
+                        autoFocus
+                        type="text"
+                        value={workspaceNameDraft}
+                        onChange={(e) => setWorkspaceNameDraft(e.target.value)}
+                        onBlur={handleRenameWorkspace}
+                        onKeyDown={(e) => e.key === 'Enter' && handleRenameWorkspace()}
+                        className="font-serif font-semibold text-ink border border-indigo rounded-lg px-2 py-1 text-sm focus:outline-none"
+                      />
+                    ) : (
+                      <h3 className="font-serif font-semibold text-ink">This Workspace</h3>
+                    )}
+
+                    {isOwner && (
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowWorkspaceMenu((prev) => !prev)}
+                          className="text-slate-400 hover:text-slate-600 leading-none px-1"
+                        >
+                          ⋮
+                        </button>
+                        {showWorkspaceMenu && (
+                          <>
+                            <div
+                              onClick={() => setShowWorkspaceMenu(false)}
+                              className="fixed inset-0 z-10"
+                            ></div>
+                            <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                              <button
+                                onClick={() => {
+                                  navigator.clipboard.writeText(room?.roomCode || '');
+                                  alert('Room code copied!');
+                                  setShowWorkspaceMenu(false);
+                                }}
+                                className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition"
+                              >
+                                Copy room code
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setWorkspaceNameDraft(room?.name || '');
+                                  setRenamingWorkspace(true);
+                                  setShowWorkspaceMenu(false);
+                                }}
+                                className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition border-t border-slate-100"
+                              >
+                                Rename workspace
+                              </button>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
                   <ul className="text-sm text-slate-600 space-y-2">
                     <li className="flex justify-between">
                       <span className="text-slate-400">Workspace</span>
