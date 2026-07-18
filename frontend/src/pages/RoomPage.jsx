@@ -391,7 +391,9 @@ function RoomPage() {
       {/* Sidebar */}
       <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-slate-100 h-screen sticky top-0">
 <div className="flex items-center gap-2 px-6 py-6">
-  <span className="text-indigo text-xl">⚡</span>
+  <svg className="w-5 h-5 text-indigo" fill="currentColor" viewBox="0 0 20 20">
+  <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+</svg>
   <span className="font-serif text-lg font-bold text-ink">Flock</span>
 </div>
 
