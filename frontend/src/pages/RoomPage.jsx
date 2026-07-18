@@ -924,6 +924,49 @@ function RoomPage() {
           </div>
         )}
         </div>
+        {activeTab === 'settings' && (
+          <div>
+            <h2 className="font-serif text-2xl font-semibold text-ink mb-6">Settings</h2>
+
+            <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5">
+              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
+                Workspace Info
+              </p>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-500">Name</span>
+                  <span className="text-sm font-medium text-ink">{room?.name}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-500">Room Code</span>
+                  <span className="text-sm font-mono text-ink">{room?.roomCode}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-500">Your Role</span>
+                  <span className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1 rounded-full uppercase">
+                    {myRole}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-slate-500">Total Members</span>
+                  <span className="text-sm font-medium text-ink">{room?.members?.length || 0}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl border border-red-100 p-5">
+              <p className="text-xs font-medium text-red-500 uppercase tracking-wide mb-3">
+                Danger Zone
+              </p>
+              <button
+                onClick={() => navigate('/dashboard')}
+                className="text-sm text-red-500 border border-red-200 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
+              >
+                Leave Workspace
+              </button>
+            </div>
+          </div>
+        )}
 
         <footer className="border-t border-slate-200 bg-white px-8 py-4">
           <div className="mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
