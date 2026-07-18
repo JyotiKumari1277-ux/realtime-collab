@@ -390,64 +390,62 @@ function RoomPage() {
     <div className="min-h-screen bg-cream font-sans flex">
       {/* Sidebar */}
       <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-slate-100 h-screen sticky top-0">
-<div className="flex items-center gap-2 px-6 py-6">
-  <svg className="w-5 h-5 text-indigo" fill="currentColor" viewBox="0 0 20 20">
-  <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
-</svg>
-  <span className="font-serif text-lg font-bold text-ink">Flock</span>
-</div>
+        <div className="flex items-center gap-2 px-6 py-6">
+          <svg className="w-5 h-5 text-indigo" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+          </svg>
+          <span className="font-serif text-lg font-bold text-ink">Flock</span>
+        </div>
 
         <nav className="flex-1 px-4 space-y-1">
-<button
-  onClick={() => {
-    setActiveTab('dashboard');
-    navigate('/dashboard'); // यह आपको डैशबोर्ड पेज पर ले जाएगा
-  }}
-  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-    activeTab === 'dashboard'
-      ? 'bg-[#1f2937] text-white'
-      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
-  }`}
->
-  <span className="text-base">🏠</span> Dashboard
-</button>
-<button
-  onClick={() => setActiveTab('members')}
-  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-    activeTab === 'members'
-      ? 'bg-[#1f2937] text-white'
-      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
-  }`}
->
-
-  <span className="text-base">👥</span> Members
-</button>
           <button
-  onClick={() => setActiveTab('activity')}
-  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-    activeTab === 'activity'
-      ? 'bg-[#1f2937] text-white'
-      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
-  }`}
->
-  <span className="text-base">📈</span> Activity
-  {activities.length > 0 && (
-    <span className={`ml-auto text-[11px] font-semibold px-2 py-0.5 rounded-full ${activeTab === 'activity' ? 'bg-white/20' : 'bg-slate-100'}`}>
-      {activities.length}
-    </span>
-  )}
-</button>
+            onClick={() => {
+              setActiveTab('dashboard');
+              navigate('/dashboard');
+            }}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'dashboard'
+                ? 'bg-[#1f2937] text-white'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+            }`}
+          >
+            <span className="text-base">🏠</span> Dashboard
+          </button>
           <button
-  onClick={() => setActiveTab('settings')}
-  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-    activeTab === 'settings'
-      ? 'bg-[#1f2937] text-white'
-      : 'text-slate-500 hover:bg-slate-50 hover:text-black'
-  }`}
->
-  <span className="text-base">⚙️</span> Settings
-</button>
-          
+            onClick={() => setActiveTab('members')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'members'
+                ? 'bg-[#1f2937] text-white'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+            }`}
+          >
+            <span className="text-base">👥</span> Members
+          </button>
+          <button
+            onClick={() => setActiveTab('activity')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'activity'
+                ? 'bg-[#1f2937] text-white'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+            }`}
+          >
+            <span className="text-base">📈</span> Activity
+            {activities.length > 0 && (
+              <span className={`ml-auto text-[11px] font-semibold px-2 py-0.5 rounded-full ${activeTab === 'activity' ? 'bg-white/20' : 'bg-slate-100'}`}>
+                {activities.length}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={() => setActiveTab('settings')}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              activeTab === 'settings'
+                ? 'bg-[#1f2937] text-white'
+                : 'text-slate-500 hover:bg-slate-50 hover:text-black'
+            }`}
+          >
+            <span className="text-base">⚙️</span> Settings
+          </button>
         </nav>
 
         <div className="px-4 pb-5 pt-3 border-t border-slate-100">
@@ -460,23 +458,23 @@ function RoomPage() {
               <p className="text-xs text-slate-400 truncate">{user?.email}</p>
             </div>
           </div>
-<button
-  onClick={() => {
-    logout();
-    navigate('/login');
-  }}
-  className="w-full text-center px-4 py-3 mt-4 bg-[#1f2937] text-white font-medium rounded-lg text-sm transition-all hover:bg-[#2d3748]"
->
-  Logout
-</button>
+          <button
+            onClick={() => {
+              logout();
+              navigate('/login');
+            }}
+            className="w-full text-center px-4 py-3 mt-4 bg-[#1f2937] text-white font-medium rounded-lg text-sm transition-all hover:bg-[#2d3748]"
+          >
+            Logout
+          </button>
         </div>
       </aside>
 
       {/* Main content */}
       <div className="flex-1 min-w-0 flex flex-col">
 
-          <div className="bg-ink text-white px-8 py-6">
-          <div className="mx-auto flex justify-between items-start">  
+        <div className="bg-ink text-white px-8 py-6">
+          <div className="mx-auto flex justify-between items-start">
             <div>
               <button
                 onClick={() => navigate('/dashboard')}
@@ -589,397 +587,397 @@ function RoomPage() {
         </div>
 
         <div className="mx-auto p-8 w-full flex-1">
-        {activeTab === 'board' && (
-          <>
-            <div className="flex gap-2 mb-6">
-              {!isViewer && (
-                <form onSubmit={handleAddTask} className="flex-1 relative">
-                  <input
-                    type="text"
-                    placeholder="Add a new task..."
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    className="w-full border border-slate-200 rounded-lg pl-4 pr-10 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
-                  />
-                  <button
-                    type="submit"
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-indigo transition text-lg leading-none"
-                    title="Add task"
-                  >
-                    ⊕
-                  </button>
-                </form>
-              )}
-
-              {!isViewer && (
-                <button
-                  onClick={handleAddTask}
-                  className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition shrink-0"
-                >
-                  + Add Task
-                </button>
-              )}
-
-              <div className="relative">
-                <button
-                  onClick={() => setShowExportMenu((prev) => !prev)}
-                  className="border border-slate-200 bg-white text-ink px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-50 transition shrink-0"
-                >
-                  Export ▾
-                </button>
-                {showExportMenu && (
-                  <>
-                    <div
-                      onClick={() => setShowExportMenu(false)}
-                      className="fixed inset-0 z-10"
-                    ></div>
-                    <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
-                      <button
-                        onClick={exportAsCSV}
-                        className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition"
-                      >
-                        Export as CSV
-                      </button>
-                      <button
-                        onClick={exportAsJSON}
-                        className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition border-t border-slate-100"
-                      >
-                        Export as JSON
-                      </button>
-                    </div>
-                  </>
+          {activeTab === 'board' && (
+            <>
+              <div className="flex gap-2 mb-6">
+                {!isViewer && (
+                  <form onSubmit={handleAddTask} className="flex-1 relative">
+                    <input
+                      type="text"
+                      placeholder="Add a new task..."
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      className="w-full border border-slate-200 rounded-lg pl-4 pr-10 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-300 hover:text-indigo transition text-lg leading-none"
+                      title="Add task"
+                    >
+                      ⊕
+                    </button>
+                  </form>
                 )}
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
-              {columns.map((col) => {
-                const colTasks = tasks.filter((t) => t.status === col.key);
-                return (
-                  <div key={col.key} className="bg-white/60 rounded-xl p-3 border border-slate-100">
-                    <div className="flex items-center gap-2 mb-3 px-1">
-                      <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`}></span>
-                      <h2 className="font-serif font-semibold text-sm text-ink">{col.label}</h2>
-                      <span className="text-xs font-medium text-slate-400 bg-slate-100 rounded-full w-5 h-5 flex items-center justify-center ml-auto">
-                        {colTasks.length}
-                      </span>
-                    </div>
+                {!isViewer && (
+                  <button
+                    onClick={handleAddTask}
+                    className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition shrink-0"
+                  >
+                    + Add Task
+                  </button>
+                )}
 
-                    {colTasks.map((task) => {
-                      const priorityInfo = priorities.find((p) => p.key === task.priority);
-                      return (
-                        <div
-                          key={task._id}
-                          onClick={() => openTaskPanel(task)}
-                          className={`relative bg-white rounded-lg p-3 mb-2 shadow-sm border-t-2 ${col.border} hover:shadow-md transition cursor-pointer`}
+                <div className="relative">
+                  <button
+                    onClick={() => setShowExportMenu((prev) => !prev)}
+                    className="border border-slate-200 bg-white text-ink px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-slate-50 transition shrink-0"
+                  >
+                    Export ▾
+                  </button>
+                  {showExportMenu && (
+                    <>
+                      <div
+                        onClick={() => setShowExportMenu(false)}
+                        className="fixed inset-0 z-10"
+                      ></div>
+                      <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                        <button
+                          onClick={exportAsCSV}
+                          className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition"
                         >
-                          <div className="flex items-start justify-between gap-2">
-                            <p className="font-medium text-sm text-ink">{task.title}</p>
-                            {!isViewer && (
-                              <div className="relative shrink-0">
+                          Export as CSV
+                        </button>
+                        <button
+                          onClick={exportAsJSON}
+                          className="w-full text-left px-4 py-2.5 text-sm text-ink hover:bg-slate-50 transition border-t border-slate-100"
+                        >
+                          Export as JSON
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-start">
+                {columns.map((col) => {
+                  const colTasks = tasks.filter((t) => t.status === col.key);
+                  return (
+                    <div key={col.key} className="bg-white/60 rounded-xl p-3 border border-slate-100">
+                      <div className="flex items-center gap-2 mb-3 px-1">
+                        <span className={`w-2.5 h-2.5 rounded-full ${col.dot}`}></span>
+                        <h2 className="font-serif font-semibold text-sm text-ink">{col.label}</h2>
+                        <span className="text-xs font-medium text-slate-400 bg-slate-100 rounded-full w-5 h-5 flex items-center justify-center ml-auto">
+                          {colTasks.length}
+                        </span>
+                      </div>
+
+                      {colTasks.map((task) => {
+                        const priorityInfo = priorities.find((p) => p.key === task.priority);
+                        return (
+                          <div
+                            key={task._id}
+                            onClick={() => openTaskPanel(task)}
+                            className={`relative bg-white rounded-lg p-3 mb-2 shadow-sm border-t-2 ${col.border} hover:shadow-md transition cursor-pointer`}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <p className="font-medium text-sm text-ink">{task.title}</p>
+                              {!isViewer && (
+                                <div className="relative shrink-0">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setOpenMenuTaskId((prev) => (prev === task._id ? null : task._id));
+                                    }}
+                                    className="text-slate-300 hover:text-slate-500 leading-none px-1"
+                                  >
+                                    ⋮
+                                  </button>
+                                  {openMenuTaskId === task._id && (
+                                    <>
+                                      <div
+                                        onClick={(e) => {
+                                          e.stopPropagation();
+                                          setOpenMenuTaskId(null);
+                                        }}
+                                        className="fixed inset-0 z-10"
+                                      ></div>
+                                      <div className="absolute right-0 mt-1 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpenMenuTaskId(null);
+                                            openTaskPanel(task);
+                                          }}
+                                          className="w-full text-left px-3 py-2 text-xs text-ink hover:bg-slate-50 transition"
+                                        >
+                                          View details
+                                        </button>
+                                        <button
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpenMenuTaskId(null);
+                                            handleDelete(task._id);
+                                          }}
+                                          className="w-full text-left px-3 py-2 text-xs text-red-500 hover:bg-red-50 transition border-t border-slate-100"
+                                        >
+                                          Delete
+                                        </button>
+                                      </div>
+                                    </>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+
+                            {priorityInfo && (
+                              <span
+                                className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full mt-2 ${priorityInfo.color}`}
+                              >
+                                {priorityInfo.label}
+                              </span>
+                            )}
+
+                            <div className="flex gap-3 mt-2.5 text-xs items-center">
+                              {!isViewer && col.key !== 'todo' && (
                                 <button
                                   onClick={(e) => {
                                     e.stopPropagation();
-                                    setOpenMenuTaskId((prev) => (prev === task._id ? null : task._id));
+                                    handleStatusChange(
+                                      task,
+                                      col.key === 'in-progress' ? 'todo' : 'in-progress'
+                                    );
                                   }}
-                                  className="text-slate-300 hover:text-slate-500 leading-none px-1"
+                                  className="text-indigo font-medium"
                                 >
-                                  ⋮
+                                  ← Move
                                 </button>
-                                {openMenuTaskId === task._id && (
-                                  <>
-                                    <div
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setOpenMenuTaskId(null);
-                                      }}
-                                      className="fixed inset-0 z-10"
-                                    ></div>
-                                    <div className="absolute right-0 mt-1 w-32 bg-white border border-slate-200 rounded-lg shadow-lg z-20 overflow-hidden">
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setOpenMenuTaskId(null);
-                                          openTaskPanel(task);
-                                        }}
-                                        className="w-full text-left px-3 py-2 text-xs text-ink hover:bg-slate-50 transition"
-                                      >
-                                        View details
-                                      </button>
-                                      <button
-                                        onClick={(e) => {
-                                          e.stopPropagation();
-                                          setOpenMenuTaskId(null);
-                                          handleDelete(task._id);
-                                        }}
-                                        className="w-full text-left px-3 py-2 text-xs text-red-500 hover:bg-red-50 transition border-t border-slate-100"
-                                      >
-                                        Delete
-                                      </button>
-                                    </div>
-                                  </>
-                                )}
-                              </div>
-                            )}
+                              )}
+                              {!isViewer && col.key !== 'done' && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleStatusChange(
+                                      task,
+                                      col.key === 'todo' ? 'in-progress' : 'done'
+                                    );
+                                  }}
+                                  className="text-teal-600 font-medium"
+                                >
+                                  Move →
+                                </button>
+                              )}
+                              {!isViewer && (
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDelete(task._id);
+                                  }}
+                                  className="text-red-400 hover:text-red-600 ml-auto"
+                                >
+                                  Delete
+                                </button>
+                              )}
+                            </div>
                           </div>
+                        );
+                      })}
 
-                          {priorityInfo && (
-                            <span
-                              className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-full mt-2 ${priorityInfo.color}`}
-                            >
-                              {priorityInfo.label}
-                            </span>
-                          )}
-
-                          <div className="flex gap-3 mt-2.5 text-xs items-center">
-                            {!isViewer && col.key !== 'todo' && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleStatusChange(
-                                    task,
-                                    col.key === 'in-progress' ? 'todo' : 'in-progress'
-                                  );
-                                }}
-                                className="text-indigo font-medium"
-                              >
-                                ← Move
-                              </button>
-                            )}
-                            {!isViewer && col.key !== 'done' && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleStatusChange(
-                                    task,
-                                    col.key === 'todo' ? 'in-progress' : 'done'
-                                  );
-                                }}
-                                className="text-teal-600 font-medium"
-                              >
-                                Move →
-                              </button>
-                            )}
-                            {!isViewer && (
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDelete(task._id);
-                                }}
-                                className="text-red-400 hover:text-red-600 ml-auto"
-                              >
-                                Delete
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    {colTasks.length === 0 && quickAddColumn !== col.key && (
-                      <div className="flex flex-col items-center text-center py-6 px-2">
-                        <div className="text-3xl mb-2">📋</div>
-                        <p className="text-xs font-medium text-slate-400">
-                          {col.key === 'done' ? 'No tasks yet' : 'No tasks'}
-                        </p>
-                        {col.key === 'done' && (
-                          <p className="text-[11px] text-slate-300 mt-0.5">
-                            Great job! You've completed everything.
+                      {colTasks.length === 0 && quickAddColumn !== col.key && (
+                        <div className="flex flex-col items-center text-center py-6 px-2">
+                          <div className="text-3xl mb-2">📋</div>
+                          <p className="text-xs font-medium text-slate-400">
+                            {col.key === 'done' ? 'No tasks yet' : 'No tasks'}
                           </p>
-                        )}
-                      </div>
-                    )}
-
-
-                  </div>
-                );
-              })}
-            </div>
-          </>
-        )}
-
-        {activeTab === 'activity' && (
-          <div>
-            <h2 className="font-serif text-2xl font-semibold text-ink mb-6">Activity</h2>
-            {activities.length === 0 ? (
-              <p className="text-sm text-slate-400">No activity yet.</p>
-            ) : (
-              <div className="space-y-3">
-                {groupActivities(activities).map((act, i) => (
-                  <div
-                    key={act._id || i}
-                    className="bg-white rounded-xl border border-slate-100 p-4 flex items-start gap-3"
-                  >
-                    <div className="w-8 h-8 rounded-full bg-indigo text-white flex items-center justify-center text-xs font-semibold shrink-0">
-                      {initials(act.user?.name)}
-                    </div>
-                    <div>
-                      <p className="text-sm text-ink">
-                        <span className="font-medium text-indigo">{act.user?.name || 'Someone'}</span>{' '}
-                        <span className="text-slate-600">
-                          {act.action}
-                          {act.count > 1 && (
-                            <span className="text-xs text-slate-400 ml-1">(×{act.count})</span>
+                          {col.key === 'done' && (
+                            <p className="text-[11px] text-slate-300 mt-0.5">
+                              Great job! You've completed everything.
+                            </p>
                           )}
-                        </span>
-                      </p>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {new Date(act.latestTime).toLocaleString([], {
-                          day: '2-digit',
-                          month: 'short',
-                          hour: '2-digit',
-                          minute: '2-digit',
-                        })}
-                      </p>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'members' && (
-          <div>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-serif text-2xl font-semibold text-ink">Members</h2>
-              <span className="text-xs font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full">
-                {room?.members?.length || 0} member{room?.members?.length > 1 ? 's' : ''}
-              </span>
-            </div>
-
-            <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5">
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
-                Invite new member
-              </p>
-              <p className="text-xs text-slate-400 mb-3">
-                Share this code — anyone with it can join this workspace.
-              </p>
-              <div className="flex gap-2">
-                <div className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono tracking-wider bg-slate-50 text-ink">
-                  {room?.roomCode}
-                </div>
-                <button
-                  onClick={() => {
-                    navigator.clipboard.writeText(room?.roomCode || '');
-                    alert('Room code copied!');
-                  }}
-                  className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition"
-                >
-                  Copy Code
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <input
-                type="text"
-                value={memberSearch}
-                onChange={(e) => setMemberSearch(e.target.value)}
-                placeholder="Search members by name or email..."
-                className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
-              />
-            </div>
-
-            <div className="bg-white rounded-xl border border-slate-100 divide-y divide-slate-100">
-              {room?.members
-                ?.filter((m) => {
-                  const q = memberSearch.toLowerCase();
-                  return (
-                    m.user?.name?.toLowerCase().includes(q) ||
-                    m.user?.email?.toLowerCase().includes(q)
                   );
-                })
-                .map((m, i) => (
-                  <div key={m.user?._id || i} className="flex items-center justify-between p-4">
-                    <div className="flex items-center gap-3">
-                      <div
-                        className={`w-9 h-9 rounded-full ${avatarColors[i % avatarColors.length]} text-white flex items-center justify-center text-sm font-semibold`}
-                      >
-                        {initials(m.user?.name)}
+                })}
+              </div>
+            </>
+          )}
+
+          {activeTab === 'activity' && (
+            <div>
+              <h2 className="font-serif text-2xl font-semibold text-ink mb-6">Activity</h2>
+              {activities.length === 0 ? (
+                <p className="text-sm text-slate-400">No activity yet.</p>
+              ) : (
+                <div className="space-y-3">
+                  {groupActivities(activities).map((act, i) => (
+                    <div
+                      key={act._id || i}
+                      className="bg-white rounded-xl border border-slate-100 p-4 flex items-start gap-3"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-indigo text-white flex items-center justify-center text-xs font-semibold shrink-0">
+                        {initials(act.user?.name)}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-ink">{m.user?.name || 'Unknown'}</p>
-                        <p className="text-xs text-slate-400">{m.user?.email}</p>
+                        <p className="text-sm text-ink">
+                          <span className="font-medium text-indigo">{act.user?.name || 'Someone'}</span>{' '}
+                          <span className="text-slate-600">
+                            {act.action}
+                            {act.count > 1 && (
+                              <span className="text-xs text-slate-400 ml-1">(×{act.count})</span>
+                            )}
+                          </span>
+                        </p>
+                        <p className="text-xs text-slate-400 mt-0.5">
+                          {new Date(act.latestTime).toLocaleString([], {
+                            day: '2-digit',
+                            month: 'short',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </p>
                       </div>
                     </div>
-                    {isOwner ? (
-                      <select
-                        value={m.role}
-                        onChange={(e) => handleRoleChange(m.user?._id, e.target.value)}
-                        className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1.5 rounded-full uppercase border-none focus:outline-none focus:ring-2 focus:ring-indigo cursor-pointer"
-                      >
-                        <option value="owner">Owner</option>
-                        <option value="editor">Editor</option>
-                        <option value="viewer">Viewer</option>
-                      </select>
-                    ) : (
-                      <span className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1 rounded-full uppercase">
-                        {m.role}
-                      </span>
-                    )}
-                  </div>
-                ))}
-            </div>
-          </div>
-        )}
-        </div>
-{activeTab === 'settings' && (
-          <div className="max-w-2xl">
-            <h2 className="font-serif text-2xl font-semibold text-ink mb-1">Settings</h2>
-            <p className="text-sm text-slate-400 mb-6">Manage your account and this workspace.</p>
-
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="col-span-1 bg-indigo/5 border border-indigo/10 rounded-xl p-4 flex flex-col items-center text-center">
-                <div className="w-14 h-14 rounded-full bg-indigo text-white flex items-center justify-center text-lg font-semibold mb-3">
-                  {initials(user?.name)}
+                  ))}
                 </div>
-                <p className="text-sm font-semibold text-ink">{user?.name}</p>
-                <p className="text-xs text-slate-400 truncate w-full">{user?.email}</p>
-                <span className="mt-2 text-[10px] font-medium text-indigo bg-white px-2 py-0.5 rounded-full border border-indigo/20">
-                  Account
+              )}
+            </div>
+          )}
+
+          {activeTab === 'members' && (
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="font-serif text-2xl font-semibold text-ink">Members</h2>
+                <span className="text-xs font-medium text-slate-500 bg-white border border-slate-200 px-3 py-1.5 rounded-full">
+                  {room?.members?.length || 0} member{room?.members?.length > 1 ? 's' : ''}
                 </span>
               </div>
 
-              <div className="col-span-2 bg-white border border-slate-100 rounded-xl p-5">
-                <h3 className="font-serif font-semibold text-ink mb-3">This Workspace</h3>
-                <ul className="text-sm text-slate-600 space-y-2">
-                  <li className="flex justify-between">
-                    <span className="text-slate-400">Workspace</span>
-                    <span className="font-medium text-ink">{room?.name}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-slate-400">Join Code</span>
-                    <span className="font-mono text-ink">{room?.roomCode}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-slate-400">Members</span>
-                    <span className="font-medium text-ink">{room?.members?.length || 0}</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-slate-400">You are</span>
-                    <span className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full uppercase">
-                      {myRole}
-                    </span>
-                  </li>
-                </ul>
+              <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5">
+                <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">
+                  Invite new member
+                </p>
+                <p className="text-xs text-slate-400 mb-3">
+                  Share this code — anyone with it can join this workspace.
+                </p>
+                <div className="flex gap-2">
+                  <div className="flex-1 border border-slate-200 rounded-lg px-4 py-2.5 text-sm font-mono tracking-wider bg-slate-50 text-ink">
+                    {room?.roomCode}
+                  </div>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(room?.roomCode || '');
+                      alert('Room code copied!');
+                    }}
+                    className="bg-indigo text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-indigo-dark transition"
+                  >
+                    Copy Code
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="bg-white border border-slate-100 rounded-xl p-5 flex items-center justify-between gap-4">
-              <div>
-                <h3 className="text-sm font-semibold text-ink">Not part of this project anymore?</h3>
-                <p className="text-xs text-slate-400 mt-0.5">You can leave this workspace and rejoin later with the code.</p>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  value={memberSearch}
+                  onChange={(e) => setMemberSearch(e.target.value)}
+                  placeholder="Search members by name or email..."
+                  className="w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo focus:border-transparent"
+                />
               </div>
-              <button
-                onClick={() => navigate('/dashboard')}
-                className="shrink-0 text-sm text-red-500 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
-              >
-                Leave Workspace
-              </button>
+
+              <div className="bg-white rounded-xl border border-slate-100 divide-y divide-slate-100">
+                {room?.members
+                  ?.filter((m) => {
+                    const q = memberSearch.toLowerCase();
+                    return (
+                      m.user?.name?.toLowerCase().includes(q) ||
+                      m.user?.email?.toLowerCase().includes(q)
+                    );
+                  })
+                  .map((m, i) => (
+                    <div key={m.user?._id || i} className="flex items-center justify-between p-4">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`w-9 h-9 rounded-full ${avatarColors[i % avatarColors.length]} text-white flex items-center justify-center text-sm font-semibold`}
+                        >
+                          {initials(m.user?.name)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-ink">{m.user?.name || 'Unknown'}</p>
+                          <p className="text-xs text-slate-400">{m.user?.email}</p>
+                        </div>
+                      </div>
+                      {isOwner ? (
+                        <select
+                          value={m.role}
+                          onChange={(e) => handleRoleChange(m.user?._id, e.target.value)}
+                          className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1.5 rounded-full uppercase border-none focus:outline-none focus:ring-2 focus:ring-indigo cursor-pointer"
+                        >
+                          <option value="owner">Owner</option>
+                          <option value="editor">Editor</option>
+                          <option value="viewer">Viewer</option>
+                        </select>
+                      ) : (
+                        <span className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1 rounded-full uppercase">
+                          {m.role}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="max-w-2xl">
+              <h2 className="font-serif text-2xl font-semibold text-ink mb-1">Settings</h2>
+              <p className="text-sm text-slate-400 mb-6">Manage your account and this workspace.</p>
+
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="col-span-1 bg-indigo/5 border border-indigo/10 rounded-xl p-4 flex flex-col items-center text-center">
+                  <div className="w-14 h-14 rounded-full bg-indigo text-white flex items-center justify-center text-lg font-semibold mb-3">
+                    {initials(user?.name)}
+                  </div>
+                  <p className="text-sm font-semibold text-ink">{user?.name}</p>
+                  <p className="text-xs text-slate-400 truncate w-full">{user?.email}</p>
+                  <span className="mt-2 text-[10px] font-medium text-indigo bg-white px-2 py-0.5 rounded-full border border-indigo/20">
+                    Account
+                  </span>
+                </div>
+
+                <div className="col-span-2 bg-white border border-slate-100 rounded-xl p-5">
+                  <h3 className="font-serif font-semibold text-ink mb-3">This Workspace</h3>
+                  <ul className="text-sm text-slate-600 space-y-2">
+                    <li className="flex justify-between">
+                      <span className="text-slate-400">Workspace</span>
+                      <span className="font-medium text-ink">{room?.name}</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-slate-400">Join Code</span>
+                      <span className="font-mono text-ink">{room?.roomCode}</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-slate-400">Members</span>
+                      <span className="font-medium text-ink">{room?.members?.length || 0}</span>
+                    </li>
+                    <li className="flex justify-between">
+                      <span className="text-slate-400">You are</span>
+                      <span className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full uppercase">
+                        {myRole}
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="bg-white border border-slate-100 rounded-xl p-5 flex items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-ink">Not part of this project anymore?</h3>
+                  <p className="text-xs text-slate-400 mt-0.5">You can leave this workspace and rejoin later with the code.</p>
+                </div>
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  className="shrink-0 text-sm text-red-500 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
+                >
+                  Leave Workspace
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
         <footer className="border-t border-slate-200 bg-white px-8 py-4">
           <div className="mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
             <span>© {new Date().getFullYear()} Flock. All rights reserved.</span>
