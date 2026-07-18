@@ -790,39 +790,7 @@ function RoomPage() {
                       </div>
                     )}
 
-                    {!isViewer && (
-                      <>
-                        {quickAddColumn === col.key ? (
-                          <form
-                            onSubmit={(e) => {
-                              e.preventDefault();
-                              handleQuickAddToColumn(col.key);
-                            }}
-                            className="mt-1"
-                          >
-                            <input
-                              autoFocus
-                              type="text"
-                              value={quickAddTitle}
-                              onChange={(e) => setQuickAddTitle(e.target.value)}
-                              onBlur={() => handleQuickAddToColumn(col.key)}
-                              placeholder="Task title..."
-                              className="w-full border border-indigo/40 rounded-lg px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo"
-                            />
-                          </form>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setQuickAddColumn(col.key);
-                              setQuickAddTitle('');
-                            }}
-                            className="w-full text-left px-3 py-2.5 mt-1 text-xs font-medium text-slate-400 hover:text-indigo hover:bg-white rounded-lg border border-dashed border-slate-200 hover:border-indigo/40 transition"
-                          >
-                            + Add another task
-                          </button>
-                        )}
-                      </>
-                    )}
+
                   </div>
                 );
               })}
