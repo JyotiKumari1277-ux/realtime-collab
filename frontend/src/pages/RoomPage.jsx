@@ -302,10 +302,10 @@ function RoomPage() {
     }
     try {
       const res = await axios.put(
-        `${API_URL}/api/rooms/${id}`,
-        { name: workspaceNameDraft },
-        config
-      );
+  `${API_URL}/api/rooms/${id}/rename`,
+  { name: workspaceNameDraft },
+  config
+);
       setRoom(res.data);
     } catch (err) {
       alert('Could not rename workspace.');
