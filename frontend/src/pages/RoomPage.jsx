@@ -927,6 +927,28 @@ function RoomPage() {
         {activeTab === 'settings' && (
           <div>
             <h2 className="font-serif text-2xl font-semibold text-ink mb-6">Settings</h2>
+            <div className="mb-5">
+          <div className="flex items-center gap-2 mb-3">
+            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Profile</p>
+            <span className="text-[10px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+              Coming soon
+            </span>
+          </div>
+          <div className="bg-white rounded-xl border border-slate-100 p-5">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-11 h-11 rounded-full bg-indigo text-white flex items-center justify-center text-base font-semibold">
+                {initials(user?.name)}
+              </div>
+              <div>
+                <p className="text-sm font-medium text-ink">{user?.name}</p>
+                <p className="text-xs text-slate-400">{user?.email}</p>
+              </div>
+            </div>
+            <p className="text-xs text-slate-400">
+              Profile editing is not yet available. Name and email are read-only.
+            </p>
+          </div>
+        </div>
 
             <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
