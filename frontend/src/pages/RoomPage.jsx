@@ -390,12 +390,10 @@ function RoomPage() {
     <div className="min-h-screen bg-cream font-sans flex">
       {/* Sidebar */}
       <aside className="hidden md:flex w-60 shrink-0 flex-col bg-white border-r border-slate-100 h-screen sticky top-0">
-        <div className="flex items-center gap-2 px-6 py-6">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo to-purple-500 flex items-center justify-center text-white text-base">
-            ⚡
-          </div>
-          <span className="font-serif text-lg font-bold text-ink">Flock</span>
-        </div>
+<div className="flex items-center gap-2 px-6 py-6">
+  <span className="text-indigo text-xl">⚡</span>
+  <span className="font-serif text-lg font-bold text-ink">Flock</span>
+</div>
 
         <nav className="flex-1 px-4 space-y-1">
 <button
