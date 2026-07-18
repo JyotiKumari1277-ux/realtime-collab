@@ -924,72 +924,62 @@ function RoomPage() {
           </div>
         )}
         </div>
-        {activeTab === 'settings' && (
-          <div>
-            <h2 className="font-serif text-2xl font-semibold text-ink mb-6">Settings</h2>
-            <div className="mb-5">
-          <div className="flex items-center gap-2 mb-3">
-            <p className="text-xs font-medium text-slate-500 uppercase tracking-wide">Profile</p>
-            <span className="text-[10px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
-              Coming soon
-            </span>
-          </div>
-          <div className="bg-white rounded-xl border border-slate-100 p-5">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-11 h-11 rounded-full bg-indigo text-white flex items-center justify-center text-base font-semibold">
-                {initials(user?.name)}
+{activeTab === 'settings' && (
+          <div className="max-w-2xl">
+            <h2 className="font-serif text-2xl font-semibold text-ink mb-1">Settings</h2>
+            <p className="text-sm text-slate-400 mb-6">Manage your account and this workspace.</p>
+
+            <div className="grid grid-cols-3 gap-4 mb-6">
+              <div className="col-span-1 bg-indigo/5 border border-indigo/10 rounded-xl p-4 flex flex-col items-center text-center">
+                <div className="w-14 h-14 rounded-full bg-indigo text-white flex items-center justify-center text-lg font-semibold mb-3">
+                  {initials(user?.name)}
+                </div>
+                <p className="text-sm font-semibold text-ink">{user?.name}</p>
+                <p className="text-xs text-slate-400 truncate w-full">{user?.email}</p>
+                <span className="mt-2 text-[10px] font-medium text-indigo bg-white px-2 py-0.5 rounded-full border border-indigo/20">
+                  Account
+                </span>
               </div>
+
+              <div className="col-span-2 bg-white border border-slate-100 rounded-xl p-5">
+                <h3 className="font-serif font-semibold text-ink mb-3">This Workspace</h3>
+                <ul className="text-sm text-slate-600 space-y-2">
+                  <li className="flex justify-between">
+                    <span className="text-slate-400">Workspace</span>
+                    <span className="font-medium text-ink">{room?.name}</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-slate-400">Join Code</span>
+                    <span className="font-mono text-ink">{room?.roomCode}</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-slate-400">Members</span>
+                    <span className="font-medium text-ink">{room?.members?.length || 0}</span>
+                  </li>
+                  <li className="flex justify-between">
+                    <span className="text-slate-400">You are</span>
+                    <span className="text-xs font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full uppercase">
+                      {myRole}
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-100 rounded-xl p-5 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-medium text-ink">{user?.name}</p>
-                <p className="text-xs text-slate-400">{user?.email}</p>
+                <h3 className="text-sm font-semibold text-ink">Not part of this project anymore?</h3>
+                <p className="text-xs text-slate-400 mt-0.5">You can leave this workspace and rejoin later with the code.</p>
               </div>
-            </div>
-            <p className="text-xs text-slate-400">
-              Profile editing is not yet available. Name and email are read-only.
-            </p>
-          </div>
-        </div>
-
-            <div className="bg-white rounded-xl border border-slate-100 p-5 mb-5">
-              <p className="text-xs font-medium text-slate-500 uppercase tracking-wide mb-3">
-                Workspace Info
-              </p>
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-500">Name</span>
-                  <span className="text-sm font-medium text-ink">{room?.name}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-500">Room Code</span>
-                  <span className="text-sm font-mono text-ink">{room?.roomCode}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-500">Your Role</span>
-                  <span className="text-xs font-medium text-indigo bg-indigo/10 px-2.5 py-1 rounded-full uppercase">
-                    {myRole}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-slate-500">Total Members</span>
-                  <span className="text-sm font-medium text-ink">{room?.members?.length || 0}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-xl border border-red-100 p-5">
-              <p className="text-xs font-medium text-red-500 uppercase tracking-wide mb-3">
-                Danger Zone
-              </p>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="text-sm text-red-500 border border-red-200 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
+                className="shrink-0 text-sm text-red-500 border border-red-200 px-4 py-2 rounded-lg hover:bg-red-500 hover:text-white transition"
               >
                 Leave Workspace
               </button>
             </div>
           </div>
         )}
-
         <footer className="border-t border-slate-200 bg-white px-8 py-4">
           <div className="mx-auto flex flex-wrap items-center justify-between gap-2 text-xs text-slate-400">
             <span>© {new Date().getFullYear()} Flock. All rights reserved.</span>
